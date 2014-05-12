@@ -1,0 +1,21 @@
+{
+    "name": "atlantis/detail",
+    "description": "",
+    "authors": [
+        {
+            "name": "Azri Jamil",
+            "email": "azri@nematix.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.1.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Atlantis\\Detail": "src/",
+            "Atlantis\\Context": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}

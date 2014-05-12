@@ -34,7 +34,7 @@ class Detail extends Eloquent {
                 'count'
             ],
             'resource'  => [
-                'status' => 'Workflow\Resources\Status'
+                'status' => 'Atlantis\Workflow\Resources\Status'
             ],
             'data'      => [
                 'status'    => 'records.status'

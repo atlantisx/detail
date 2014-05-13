@@ -142,7 +142,7 @@ class Record extends Eloquent {
         //[i] Get diff status if role is student
         $user = \Sentry::getUser();
         if( $user ){
-            $user_realm = \Atlantis::users()->getUserRealmById($user->id);
+            $user_realm = \App::make('atlantis.realm')->byUserId($user->id);
 
             if($user_realm->name == 'student'){
                 foreach( $status_student as $key => $value ){
@@ -158,16 +158,11 @@ class Record extends Eloquent {
     }
 
 
-    public function status_count($statuses){
+    public static function status_count($statuses){
         $status_count = array();
 
         foreach($statuses as $status){
-            $status_count[$status] = array(
-                'total' => $this->where('status','=',$status)->count(),
-                'title' => trans( 'advance.status.general.'.$status),
-                'label' => trans( 'advance.status_label.'.$status),
-                'color' => trans( 'advance.status_color.'.$status)
-            );
+            $status_count[$status] = Record::where('status','=',$status)->count();
         }
 
         return $status_count;

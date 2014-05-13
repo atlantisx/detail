@@ -1,6 +1,7 @@
 <?php namespace Atlantis\Detail\Model;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Rhumsaa\Uuid\Uuid;
 
 
 class Record extends Eloquent {
@@ -15,7 +16,7 @@ class Record extends Eloquent {
         parent::boot();
 
         static::creating(function ($model) {
-            $model->uuid = \String::uuid();
+            $model->uuid = Uuid::uuid1();
         });
 
         static::deleting(function ($detail){

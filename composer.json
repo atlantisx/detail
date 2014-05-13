@@ -14,7 +14,8 @@
     "autoload": {
         "psr-0": {
             "Atlantis\\Detail": "src/",
-            "Atlantis\\Context": "src/"
+            "Atlantis\\Context": "src/",
+            "Atlantis\\Workflow": "src/"
         }
     },
     "minimum-stability": "stable"

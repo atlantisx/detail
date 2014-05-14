@@ -89,6 +89,7 @@ class Status implements ArrayAccess{
         if( isset($this->container[$offset]) ){
             return [
                 'id'    => $offset,
+                'name'  => $this->container[$offset],
                 'title' => trans("advance::advance.status.{$this->realm->name}.".$this->container[$offset]),
                 'label' => $label[$offset],
                 'color' => $colour[$offset]

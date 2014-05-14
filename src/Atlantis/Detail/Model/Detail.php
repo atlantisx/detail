@@ -3,6 +3,7 @@
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
+use Underscore\Types\Arrays;
 
 
 class Detail extends Eloquent {
@@ -13,31 +14,24 @@ class Detail extends Eloquent {
     public $timestamps = false;
 
 
-    public function __construct(){
-        //$this->filters();
-    }
-
-
     public function records(){
-        return $this->hasMany('\Atlantis\Detail\Model\Record');
+        return $this->hasMany('Atlantis\Detail\Model\Record','application_id','id');
     }
 
 
     public function contexts(){
-        return $this->hasMany('\Atlantis\Context\Model\Context');
+        return $this->hasMany('Atlantis\Context\Model\Context','detail_id','id');
     }
 
 
     public function workflows($path){
         $patterns = [
             'control'   => [
-                'count'
             ],
             'resource'  => [
                 'status' => 'Atlantis\Workflow\Resources\Status'
             ],
             'data'      => [
-                'status'    => 'records.status'
             ],
         ];
 
@@ -51,55 +45,41 @@ class Detail extends Eloquent {
     }
 
 
-    public function filters(){
-        #i: Get filters
-        $filters = ['context'];
-
-        #i: Execute filters
-        foreach( $filters as $filter ){
-            $this->{$filter.'Filter'}();
-        }
-    }
-
-
-    public function contextFilter(){
-        foreach( $this->contexts()->all() as $context ){
-
-        }
-    }
-
-
-    public function getConfigs($name=null){
-        if( $name ){
-            if( isset($this->config->{$name}) ) return $this->config->{$name};
-
-        }else{
-            return $this->config;
-        }
-    }
-
-
     public function getConfigAttribute($value){
         if( empty($value) ) $value = '{}';
         return json_decode($value);
     }
 
 
-    public function getCardsAttribute($value){
-        if( empty($value) ) $value = '{}';
-        return json_decode($value);
+    public function getAttribute($key){
+        $value_original = null;
+
+        #i: Parent original value
+        if( parent::getAttribute($key) ){
+            $value_original = parent::getAttribute($key);
+        }
+
+        #i: Get context
+        $contexts = \App::make('context');
+
+        #i: Filter contexts
+        $context = Arrays::find($contexts->all(), function($value){
+            return $value->reaction_parameters->model == get_called_class();
+        });
+
+        if($context){
+            #i: Inspect context
+            $value_override = $contexts->reactionInspect($context->reaction_provider,[$this,$key,$context->reaction_parameters]);
+
+            #i: Override value
+            if($value_override) $value_original = $value_override;
+        }
+
+        return $value_original;
     }
 
 
-    public function getPageTitleAttribute(){
-        $route_name = Route::currentRouteName();
-        $menus = $this->getMenusAttribute();
-
-        return ( isset($menus['items'][$route_name]) ? $menus['items'][$route_name] : $menus['title'] );
-    }
-
-
-    public function getMenusAttribute(){
-        return Config::get('admin::admin.sidebar.applications.'.$this->name);
+    public function __isset($key){
+        if( $this->getAttribute($key) ) return true;
     }
 }

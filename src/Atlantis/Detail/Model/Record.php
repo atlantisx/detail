@@ -26,7 +26,7 @@ class Record extends Eloquent {
 
 
     public function detail(){
-        return $this->belongsTo('\Atlantis\Detail\Model\Detail');
+        return $this->belongsTo('Atlantis\Detail\Model\Detail');
     }
 
 

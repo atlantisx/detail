@@ -25,13 +25,36 @@ class ContextServiceProvider extends ServiceProvider {
         });
 
         $this->app->bindShared('context.condition', function($app){
-            $app['context']->conditions();
+            return $app['context']->conditions();
         });
 
         $this->app->bindShared('context.reactions', function($app){
-            $app['context']->reactions();
+            return $app['context']->reactions();
+        });
+
+        $this->app->bind('context.model', function($app){
+           return new Model\Context;
         });
 	}
+
+
+    public function boot(){
+        $this->app['router']->matched(function($route,$request){
+            #i: Get all route condition context
+            $contexts = $this->app['context.model']->whereConditionType('route')->get();
+
+            #i: Iterate to execute every context provider
+            foreach( $contexts as $context ){
+                #i: Get context condition provider
+                $provider = $this->app['context']->condition($context->condition_provider);
+
+                #i: Check condition
+                if( $provider->check($route,$context->condition_parameters) ){
+                    $this->app['context']->set($context);
+                };
+            }
+        });
+    }
 
 
 	/**

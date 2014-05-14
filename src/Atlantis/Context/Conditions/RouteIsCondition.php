@@ -6,10 +6,13 @@ use Atlantis\Context\ConditionInterface;
 class RouteIsCondition implements ConditionInterface {
 
     public function check(){
-        $parameters = func_get_args();
+        #i: Get arguments
+        list($route,$parameters) = func_get_args();
 
+        #i: Check arguments
         if(empty($parameters)) return false;
 
-        return ( $parameters[0] == \Route::currentRouteName() );
+        #i: Condition task
+        return ( $parameters->name == $route->getName() );
     }
 }

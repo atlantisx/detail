@@ -1,6 +1,7 @@
 <?php namespace Atlantis\Context;
 
 use Closure;
+use Illuminate\Support\Collection;
 use Atlantis\Context\Enums;
 use Atlantis\Context\Conditions;
 
@@ -12,7 +13,7 @@ class ContextManager {
      *
      * @var array
      */
-    protected $contexts = [];
+    protected $contexts;
 
 
     /**
@@ -52,6 +53,7 @@ class ContextManager {
     public function __construct($app)
     {
         $this->app = $app;
+        $this->contexts = new Collection([]);
     }
 
 
@@ -85,7 +87,7 @@ class ContextManager {
 
 
     /**
-     * Get condition provider
+     * Get reaction provider
      *
      * @param $name
      * @return mixed
@@ -111,6 +113,25 @@ class ContextManager {
         #i: Return provider
         return $this->reactions[$name];
     }
+
+
+    /**
+     *
+     *
+     * @return mixed
+     */
+    public function reactionInspect($name,$arguments){
+        $run = $this->reaction($name);
+
+        if( get_class($run) == 'Closure' ){
+            return call_user_func_array($run,$arguments);
+        }else{
+            return $run->run($arguments);
+        }
+
+        return null;
+    }
+
 
     /**
      *
@@ -141,7 +162,7 @@ class ContextManager {
      */
     public function extendCondition($name, Closure $callback)
     {
-        $this->extension_conditions[$name] = $callback;
+        $this->conditions_extension[$name] = $callback;
     }
 
 
@@ -152,6 +173,26 @@ class ContextManager {
      */
     public function extendReaction($name, Closure $callback)
     {
-        $this->extension_reactions[$name] = $callback;
+        $this->reaction_extensions[$name] = $callback;
+    }
+
+
+    /**
+     *
+     *
+     * @return void
+     */
+    public function set($context){
+        $this->contexts->put($context->id,$context);
+    }
+
+
+    /**
+     *
+     *
+     * @return mixed
+     */
+    public function __call($method, $parameters){
+        return call_user_func_array([$this->contexts,$method],$parameters);
     }
 }

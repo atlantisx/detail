@@ -7,6 +7,6 @@ interface ReactionInterface {
 	 *
 	 * @return mixed
 	 */
-	public function get();
+	public function run();
 
 }

@@ -10,12 +10,12 @@ class Detail extends Eloquent {
     protected $table = 'applications';
     protected $primaryKey = 'name';
     protected $guarded = array('id');
-    public $appends = array('cards','page_title');
+    public $appends = array('cards');
     public $timestamps = false;
 
 
     public function records(){
-        return $this->hasMany('Atlantis\Detail\Model\Record','application_id','id');
+        return $this->hasMany('Record','application_id','id');
     }
 
 

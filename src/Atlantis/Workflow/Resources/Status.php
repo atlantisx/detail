@@ -6,6 +6,7 @@ use Atlantis\View\Interfaces\Realm;
 
 class Status implements ArrayAccess{
     private $container = [];
+    protected $default = null;
     protected $realm;
 
 
@@ -108,5 +109,20 @@ class Status implements ArrayAccess{
         }
 
         return $statuses;
+    }
+
+
+    public function __invoke($value){
+        if( !isset($this->default) ){
+            $this->default = $value;
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+    public function __toString(){
+        return (string)$this->default;
     }
 }

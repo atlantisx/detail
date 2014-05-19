@@ -1,6 +1,7 @@
 {
     "name": "atlantis/detail",
-    "description": "",
+    "description": "Atlantis Framework : Detail",
+    "keywords": ["core","administrator", "admin", "database", "atlantis", "laravel", "cms", "enterprise"],
     "authors": [
         {
             "name": "Azri Jamil",
@@ -12,6 +13,9 @@
         "illuminate/support": "4.1.*"
     },
     "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
         "psr-0": {
             "Atlantis\\Detail": "src/",
             "Atlantis\\Context": "src/",

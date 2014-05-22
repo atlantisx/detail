@@ -12,36 +12,13 @@ class Context extends Eloquent{
      */
     protected $table = 'contexts';
 
+    protected $guarded = ['id'];
+
+    public $timestamps = false;
+
 
     public function detail(){
         return $this->belongsTo('\Atlantis\Detail\Model\Detail');
-    }
-
-
-    public function getConditionParametersAttribute($value){
-        if( json_decode($value) ) {
-            return json_decode($value);
-        }else{
-            return $value;
-        }
-    }
-
-
-    public function setConditionParametersAttribute($value){
-        $this->attributes['condition'] = json_encode($value);
-    }
-
-
-    public function getReactionParametersAttribute($value){
-        if( json_decode($value) ) {
-            return json_decode($value);
-        }else{
-            return $value;
-        }
-    }
-
-    public function setReactionParametersAttribute($value){
-        $this->attributes['reactions'] = json_encode($value);
     }
 
 }

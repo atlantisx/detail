@@ -7,7 +7,7 @@ use Underscore\Types\Arrays;
 
 
 class Detail extends Eloquent {
-    protected $table = 'applications';
+    protected $table = 'details';
     protected $primaryKey = 'name';
     protected $guarded = array('id');
     public $appends = array('cards');

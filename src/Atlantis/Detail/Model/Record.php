@@ -5,7 +5,7 @@ use Rhumsaa\Uuid\Uuid;
 
 
 class Record extends Eloquent {
-    protected $table = 'details';
+    protected $table = 'records';
     protected $primaryKey = 'uuid';
     protected $guarded = array('uuid','created_when','updated_when');
     protected $appends = array('created_when','updated_when');

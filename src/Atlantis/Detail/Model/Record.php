@@ -17,7 +17,7 @@ class Record extends Eloquent {
         parent::boot();
 
         static::creating(function ($model) {
-            $model->uuid = Uuid::uuid1();
+            $model->uuid = Uuid::uuid4();
         });
 
         static::deleting(function ($detail){
@@ -42,7 +42,11 @@ class Record extends Eloquent {
     }
 
     public function setMetaAttribute($value){
-        $this->attributes['meta'] = json_encode($value);
+        if( is_array($value) || is_object($value) ){
+            $this->attributes['meta'] = json_encode($value);
+        }else{
+            $this->attributes['meta'] = $value;
+        }
     }
 
 
@@ -94,36 +98,4 @@ class Record extends Eloquent {
             }
         });
     }
-
-
-    /*protected function progress_percent(){
-        $incomplete = array();
-        $required = array(
-            $this->institution_name,             //institusi
-            $this->institution_code,             //kod_institusi
-            $this->institution_state,            //negeri_institusi
-            $this->application_location,         //tempat_memohon
-            $this->application_coursed,          //kursus
-            $this->application_date,             //tkh_permohonan
-            $this->application_existing,         //pernah_memohon
-            $this->course_level,                 //peringkat_pengajian
-            $this->course_code,                  //kod_kursus
-            $this->course_start,                 //tkh_mula_kursus
-            $this->course_end,                   //tkh_tamat_kursus
-            $this->guardian_id,
-            $this->guardian_salary_gross,       //pendapatan_kasar_penjaga
-            $this->guardian_family_no,          //bil_tanggungan_penjaga
-            $this->guardian_employment,         //pekerjaan_penjaga
-            $this->guarantor_id,
-            $this->guarantor_status,            //status_penjamin
-            $this->guarantor_salary_gross,      //pendapatan_kasar_penjamin
-            $this->amount_total                 //jum_dipohon
-        );
-
-        foreach( $required as $field){
-            if( empty($field) ) array_push($incomplete, $field);
-        }
-
-        return round( ( count($incomplete) / count($required) ) * 100 );
-    }*/
 }

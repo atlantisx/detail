@@ -14,6 +14,8 @@ class Context extends Eloquent{
 
     protected $guarded = ['id'];
 
+    public $timestamps = false;
+
     public function detail(){
         return $this->belongsTo('\Atlantis\Detail\Model\Detail');
     }
@@ -29,7 +31,11 @@ class Context extends Eloquent{
 
 
     public function setConditionParametersAttribute($value){
-        $this->attributes['condition_parameters'] = json_encode($value);
+        if( gettype($value) == 'object' || gettype($value) == 'array' ){
+            $this->attributes['condition_parameters'] = json_encode($value);
+        }else{
+            $this->attributes['condition_parameters'] = $value;
+        }
     }
 
 
@@ -42,7 +48,11 @@ class Context extends Eloquent{
     }
 
     public function setReactionParametersAttribute($value){
-        $this->attributes['reactions_parameters'] = json_encode($value);
+        if( gettype($value) == 'object' || gettype($value) == 'array' ){
+            $this->attributes['reaction_parameters'] = json_encode($value);
+        }else{
+            $this->attributes['reaction_parameters'] = $value;
+        }
     }
 
 }

@@ -31,13 +31,13 @@ class Status implements ArrayAccess{
     protected $label = array(
         0 => 'info',
         1 => 'warning',
-        2 => 'red',
+        2 => 'danger',
         3 => 'success',
         4 => 'success',
-        5 => 'red',
+        5 => 'danger',
         6 => 'warning',
         7 => 'success',
-        8 => 'red',
+        8 => 'danger',
         9 => 'success',
         12=> 'success'
     );

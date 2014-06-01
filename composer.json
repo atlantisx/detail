@@ -1,7 +1,7 @@
 {
     "name": "atlantis/detail",
     "description": "Atlantis Framework : Detail",
-    "keywords": ["core","administrator", "admin", "database", "atlantis", "laravel", "cms", "enterprise"],
+    "keywords": ["core","form", "detail", "database", "atlantis", "laravel", "cms", "enterprise"],
     "authors": [
         {
             "name": "Azri Jamil",

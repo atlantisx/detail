@@ -62,13 +62,13 @@ class Record extends Eloquent {
 
     public function scopeFiltering($query,$columns=array()){
         foreach($columns as $column => $value){
-            $array_column =  explode('.',$column);
-            $field = array_pop($array_column);
-            $field_last = last($array_column);
+            $relations =  explode('.',$column);
+            $field = array_pop($relations);
+            $relation = head($relations);
 
-            if( count($array_column) > 0 ){
-                array_reduce($array_column, function(&$collector,$item) use($field_last, $field, $value){
-                    $collector->whereHas($item, function($query) use(&$collector,$item,$field_last, $field, $value){
+            if( count($relations) > 0 ){
+                /*array_reduce($array_column, function(&$collector,$item) use($field_last, $field, $value){
+                    $collector->whereHas($item, function($query) use(&$collector, $item, $field_last, $field, $value){
                         if($item == $field_last){
                             $query->where($field,'LIKE',$value.'%');
                         }
@@ -76,7 +76,30 @@ class Record extends Eloquent {
                     });
 
                     return $collector;
-                },$query);
+                },$query);*/
+
+                $query->whereHas($relation, function($q) use($relations,$field,$value){
+                    $relation = array_pop($relations);
+                    if( count($relations) == 0 ){
+                        $q->where($field,'LIKE',$value.'%');
+
+                    }else{
+                        $q->whereHas($relation, function($q) use($relations,$field,$value){
+                            $relation = array_pop($relations);
+                            if( count($relations) == 0 ){
+                                $q->where($field,'LIKE',$value.'%');
+
+                            }else{
+                                $q->whereHas($relation, function($q) use($relations,$field,$value){
+                                    $relation = array_pop($relations);
+                                    if( count($relations) == 0 ){
+                                        $q->where($field,'LIKE',$value.'%');
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
 
             }else{
                 #i: Filtering normal columns

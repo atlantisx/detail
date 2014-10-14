@@ -62,7 +62,7 @@ class Status implements ArrayAccess{
         $this->realm = $realm->current();
 
         #i: Set as default arrays
-        $this->container = $this->status[$this->realm->name];
+        $this->container = $this->realm ? $this->status[$this->realm->name] : $this->status['staff'];
     }
 
 
@@ -86,14 +86,15 @@ class Status implements ArrayAccess{
 
 
     public function offsetGet($offset) {
-        $offset = $this->offsetRealm($this->realm->name,$offset);
+        $realm_name = $this->realm ? $this->realm->name : 'staff';
+        $offset = $this->realm ? $this->offsetRealm($this->realm->name,$offset) : $offset;
 
         #i: Get value
         if( isset($this->container[$offset]) ){
             return [
                 'id'    => $offset,
                 'name'  => $this->container[$offset],
-                'title' => trans("advance::advance.status.{$this->realm->name}.".$this->container[$offset]),
+                'title' => trans("advance::advance.status.{$realm_name}.".$this->container[$offset]),
                 'label' => $this->label[$offset],
                 'color' => $this->colour[$offset]
             ];

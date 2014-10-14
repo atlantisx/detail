@@ -37,7 +37,7 @@ class Detail extends Eloquent {
 
         $pattern = array_get($patterns,$path);
 
-        if( isset($pattern) ){
+        if( !empty($pattern) ){
             return \App::make($pattern);
         }
 

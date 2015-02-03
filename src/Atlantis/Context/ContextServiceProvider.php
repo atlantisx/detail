@@ -38,10 +38,23 @@ class ContextServiceProvider extends ServiceProvider {
 	}
 
 
+    /**
+     * Boot service provider
+     *
+     */
     public function boot(){
+        $this->bootConditionRouter();
+    }
+
+
+    /**
+     * Condition Boot : Router Category
+     *
+     */
+    function bootConditionRouter(){
         $this->app['router']->matched(function($route,$request){
             #i: Get all route condition context
-            $contexts = $this->app['context.model']->whereConditionType('route')->get();
+            $contexts = $this->app['context.model']->whereConditionType('route')->get();    // Will changed to router
 
             #i: Iterate to execute every context provider
             foreach( $contexts as $context ){

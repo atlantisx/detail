@@ -1,12 +1,8 @@
 <?php namespace Atlantis\Detail\Model;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Config;
-use Underscore\Types\Arrays;
+use Atlantis\Core\Model\BaseModel;
 
-
-class Detail extends Eloquent {
+class Detail extends BaseModel {
     protected $table = 'details';
     protected $primaryKey = 'name';
     protected $guarded = array('id');
@@ -38,7 +34,7 @@ class Detail extends Eloquent {
         $pattern = array_get($patterns,$path);
 
         if( !empty($pattern) ){
-            return \App::make($pattern);
+            return app($pattern);
         }
 
         return null;
@@ -50,45 +46,4 @@ class Detail extends Eloquent {
         return json_decode($value);
     }
 
-
-    public function getAttribute($key){
-        $value_original = null;
-
-        #i: Parent original value
-        if( parent::getAttribute($key) ){
-            $value_original = parent::getAttribute($key);
-        }
-
-        #i: Context Reaction
-        $context_value = $this->getContextReaction($key);
-        if( $context_value ) $value_original = $context_value;
-
-        return $value_original;
-    }
-
-
-    public function getContextReaction($key){
-        #i: Get context
-        $contexts = \App::make('context');
-
-        #i: Filter Reaction Contexts
-        $context = Arrays::find($contexts->all(), function($value){
-            return $value->reaction_parameters->model == get_called_class();
-        });
-
-        #i: Inspect reaction context
-        if($context){
-            #i: Inspect context
-            $value = $contexts->reactionInspect($context->reaction_provider,[$this,$key,$context->reaction_parameters]);
-
-            #i: Override value
-            if($value) return $value;
-        }
-
-        return null;
-    }
-
-    public function __isset($key){
-        if( $this->getAttribute($key) ) return true;
-    }
 }

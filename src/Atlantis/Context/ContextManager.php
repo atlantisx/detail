@@ -125,8 +125,9 @@ class ContextManager {
 
         if( get_class($run) == 'Closure' ){
             return call_user_func_array($run,$arguments);
+
         }else{
-            return $run->run($arguments);
+            return call_user_func_array([$run,'run'],$arguments);
         }
 
         return null;

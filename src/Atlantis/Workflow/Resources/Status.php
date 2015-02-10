@@ -24,7 +24,7 @@ class Status implements ArrayAccess{
             12 => 'complete',       //'Lengkap'
         ],
         'student' => [
-            1 => 'in_process'
+            -1 => 'in_process'
         ]
     ];
 
@@ -124,10 +124,11 @@ class Status implements ArrayAccess{
 
 
     public function offsetRealm($realm,$offset){
+        /** Student status override */
         if($realm == 'student'){
             $found = null;
             $status_student = array(
-                1 => array(1,2,3,4,5,6)
+                -1 => array(3,4,5,6)
             );
 
             foreach( $status_student as $key => $value ){

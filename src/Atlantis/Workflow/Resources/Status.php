@@ -29,6 +29,7 @@ class Status implements ArrayAccess{
     ];
 
     protected $label = array(
+        -1 => 'warning',
         0 => 'info',
         1 => 'warning',
         2 => 'danger',
@@ -43,6 +44,7 @@ class Status implements ArrayAccess{
     );
 
     protected $colour = array(
+        -1 => 'orange',
         0 => 'blue',
         1 => 'orange',
         2 => 'orange',

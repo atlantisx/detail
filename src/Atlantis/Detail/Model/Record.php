@@ -1,10 +1,13 @@
-<?php namespace Atlantis\Detail\Model;
+<?php
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
+namespace Atlantis\Detail\Model;
+
 use Rhumsaa\Uuid\Uuid;
 use Carbon\Carbon;
+use Atlantis\Core\Model\BaseModel;
 
-class Record extends Eloquent {
+
+class Record extends BaseModel {
     protected $table = 'records';
     protected $primaryKey = 'uuid';
     protected $guarded = array('uuid','created_when','updated_when');
@@ -36,20 +39,6 @@ class Record extends Eloquent {
     }
 
 
-    public function getMetaAttribute($value){
-        if( empty($value) ) $value = '{}';
-        return json_decode($value);
-    }
-
-    public function setMetaAttribute($value){
-        if( is_array($value) || is_object($value) ){
-            $this->attributes['meta'] = json_encode($value);
-        }else{
-            $this->attributes['meta'] = $value;
-        }
-    }
-
-
     public function getCreatedWhenAttribute(){
         return Carbon::createFromTimeStamp(strtotime($this->created_at))->diffForHumans();
     }
@@ -67,17 +56,6 @@ class Record extends Eloquent {
             $relation = head($relations);
 
             if( count($relations) > 0 ){
-                /*array_reduce($array_column, function(&$collector,$item) use($field_last, $field, $value){
-                    $collector->whereHas($item, function($query) use(&$collector, $item, $field_last, $field, $value){
-                        if($item == $field_last){
-                            $query->where($field,'LIKE',$value.'%');
-                        }
-                        $collector = $query;
-                    });
-
-                    return $collector;
-                },$query);*/
-
                 $query->whereHas($relation, function($q) use($relations,$field,$value){
                     $relation = array_pop($relations);
                     if( count($relations) == 0 ){
@@ -121,4 +99,5 @@ class Record extends Eloquent {
             }
         });
     }
+
 }

@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Rhumsaa\Uuid\Uuid;
-
+use Carbon\Carbon;
 
 class Record extends Eloquent {
     protected $table = 'records';
@@ -51,12 +51,12 @@ class Record extends Eloquent {
 
 
     public function getCreatedWhenAttribute(){
-        return \Carbon\Carbon::createFromTimeStamp(strtotime($this->created_at))->diffForHumans();
+        return Carbon::createFromTimeStamp(strtotime($this->created_at))->diffForHumans();
     }
 
 
     public function getUpdatedWhenAttribute(){
-        return \Carbon\Carbon::createFromTimeStamp(strtotime($this->updated_at))->diffForHumans();
+        return Carbon::createFromTimeStamp(strtotime($this->updated_at))->diffForHumans();
     }
 
 
@@ -102,7 +102,7 @@ class Record extends Eloquent {
                 });
 
             }else{
-                #i: Filtering normal columns
+                /** Filtering normal columns */
                 $query->where($field,'LIKE',$value.'%');
             }
         }

@@ -35,7 +35,7 @@ class Record extends BaseModel {
 
 
     public function documents(){
-        return $this->hasMany('Document','detail_uuid');
+        return $this->hasMany('Document','detail_uuid','uuid');
     }
 
 

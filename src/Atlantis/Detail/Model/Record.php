@@ -2,7 +2,7 @@
 
 namespace Atlantis\Detail\Model;
 
-use Rhumsaa\Uuid\Uuid;
+use Ramsey\Uuid\Uuid;
 use Carbon\Carbon;
 use Atlantis\Core\Model\BaseModel;
 
